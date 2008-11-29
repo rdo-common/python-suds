@@ -3,7 +3,7 @@
 Summary: A python SOAP client
 Name:  python-suds
 Version: 0.3.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Source0: https://fedorahosted.org/releases/s/u/%{name}/%{name}-%{version}.tar.gz
 License: LGPLv3+
 Group: Development/Libraries
@@ -57,6 +57,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc README LICENSE
 
 %changelog
+* Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 0.3.2-2
+- Rebuild for Python 2.6
+
 * Fri Nov 06 2008 jortel <jortel@redhat.com> - 0.3.2-1
 - Add SOAP MultiRef support
 - Add support for new schema tags:
