@@ -2,8 +2,8 @@
 
 Summary: A python SOAP client
 Name:  python-suds
-Version: 0.3.2
-Release: 2%{?dist}
+Version: 0.3.3
+Release: 1%{?dist}
 Source0: https://fedorahosted.org/releases/s/u/%{name}/%{name}-%{version}.tar.gz
 License: LGPLv3+
 Group: Development/Libraries
@@ -47,16 +47,24 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{python_sitelib}/suds/bindings
 %dir %{python_sitelib}/suds/sax
 %dir %{python_sitelib}/suds/xsd
-%dir %{python_sitelib}/tests
 %{python_sitelib}/suds/*.py*
 %{python_sitelib}/suds/bindings/*.py*
 %{python_sitelib}/suds/sax/*.py*
 %{python_sitelib}/suds/xsd/*.py*
-%{python_sitelib}/tests/*.py*
 
 %doc README LICENSE
 
 %changelog
+* Wed Dec 04 2008 jortel <jortel@redhat.com> - 0.3.3-1
+- No longer installs (tests) package.
+- Implements API-3 proposal
+    Pluggable transport
+    Keyword method arguments
+    Baisc http authentication in default transport
+- Add namespace prefix normalization in soap message.
+- Better soap message pruning of empty nodes.
+- Fixed Tickets: #51 - #60.
+
 * Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 0.3.2-2
 - Rebuild for Python 2.6
 
