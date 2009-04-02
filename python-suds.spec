@@ -1,8 +1,9 @@
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%{!?version: %define version %(%{__python} -c "from suds import properties; print properties['version']")}
 
 Summary: A python SOAP client
 Name:  python-suds
-Version: 0.3.4
+Version: %{version}
 Release: 1%{?dist}
 Source0: https://fedorahosted.org/releases/s/u/%{name}/%{name}-%{version}.tar.gz
 License: LGPLv3+
@@ -10,11 +11,7 @@ Group: Development/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildArch: noarch
 Requires: python >= 2.3
-%if 0%{?fedora} >= 8
-BuildRequires: python-setuptools-devel
-%else
 BuildRequires: python-setuptools
-%endif
 Url: https://fedorahosted.org/suds
 
 %description
@@ -40,21 +37,31 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%if 0%{?fedora} >= 8
 %{python_sitelib}/suds*.egg-info
-%endif
 %dir %{python_sitelib}/suds
 %dir %{python_sitelib}/suds/bindings
 %dir %{python_sitelib}/suds/sax
 %dir %{python_sitelib}/suds/xsd
+%dir %{python_sitelib}/suds/transport
 %{python_sitelib}/suds/*.py*
 %{python_sitelib}/suds/bindings/*.py*
 %{python_sitelib}/suds/sax/*.py*
 %{python_sitelib}/suds/xsd/*.py*
+%{python_sitelib}/suds/transport/*.py*
 
 %doc README LICENSE
 
 %changelog
+* Wed Feb 25 2009 jortel <jortel@redhat.com> - 0.3.5-1
+- Adds http caching.  Default is (1) day.
+- Replaced build requires python-setuptools-devel with python-setuptools in the spec.
+- Removed checking fc version in spec since no longer building < fc9.
+- Updated spec to get version from suds properties.
+- Updated makefile to roll tarball with tar.sh.
+- Moved bare/wrapped determination to wsdl for document/literal.
+- Refactored Transport to provide better visibility into http headers.
+- Fixed Tickets: #207, #207, #209, #210, #212, #214, #215
+
 * Mon Dec 08 2008 jortel <jortel@redhat.com> - 0.3.4-1
 - Static (automatic) Import.bind('http://schemas.xmlsoap.org/soap/encoding/')
 - Basic ws-security with {{{UsernameToken}}} and clear-text password only.
