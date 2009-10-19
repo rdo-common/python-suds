@@ -2,8 +2,8 @@
 
 Summary: A python SOAP client
 Name:  python-suds
-Version: 0.3.6
-Release: 2%{?dist}
+Version: 0.3.7
+Release: 1%{?dist}
 Source0: https://fedorahosted.org/releases/s/u/%{name}/%{name}-%{version}.tar.gz
 License: LGPLv3+
 Group: Development/Libraries
@@ -41,16 +41,34 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{python_sitelib}/suds/bindings
 %dir %{python_sitelib}/suds/sax
 %dir %{python_sitelib}/suds/xsd
+%dir %{python_sitelib}/suds/mx
+%dir %{python_sitelib}/suds/umx
 %dir %{python_sitelib}/suds/transport
 %{python_sitelib}/suds/*.py*
 %{python_sitelib}/suds/bindings/*.py*
 %{python_sitelib}/suds/sax/*.py*
 %{python_sitelib}/suds/xsd/*.py*
+%{python_sitelib}/suds/mx/*.py*
+%{python_sitelib}/suds/umx/*.py*
 %{python_sitelib}/suds/transport/*.py*
 
 %doc README LICENSE
 
 %changelog
+* Thu Oct 16 2009 jortel <jortel@redhat.com> - 0.3.7-1
+- Better soap header support
+- Added new transport HttpAuthenticated for active (not passive) basic authentication.
+- New options (prefixes, timeout, retxml)
+- WSDL processing enhancements.
+- Expanded builtin XSD type support.
+- Fixed <xs:iniclude/>
+- Better XML date/datetime conversion.
+- Client.clone() method added for lightweight copy of client object.
+- XSD processing fixes/enhancements.
+- Better <simpleType/> by <xs:restriction/> support.
+- Performance enhancements. 
+- Fixed tickets: #65, #232, #233, #235, #241, #242, #244, #247, #254, #254, #256, #257, #258
+
 * Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.3.6-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
