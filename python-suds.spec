@@ -3,7 +3,7 @@
 Summary: A python SOAP client
 Name:  python-suds
 Version: 0.3.9
-Release: 1%{?dist}
+Release: 2%{?dist}
 Source0: https://fedorahosted.org/releases/s/u/%{name}/%{name}-%{version}.tar.gz
 License: LGPLv3+
 Group: Development/Libraries
@@ -55,6 +55,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc README LICENSE
 
 %changelog
+* Thu Jul 22 2010 David Malcolm <dmalcolm@redhat.com> - 0.3.9-2
+- Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
+
 * Thu Dec 17 2009 jortel <jortel@redhat.com> - 0.3.9-1
 - Bumped python requires to 2.4
 - Replaced stream-based caching in the transport package with document-based caching.
