@@ -3,7 +3,7 @@
 Summary: A python SOAP client
 Name:  python-suds
 Version: 0.3.9
-Release: 2%{?dist}
+Release: 3%{?dist}
 Source0: https://fedorahosted.org/releases/s/u/%{name}/%{name}-%{version}.tar.gz
 License: LGPLv3+
 Group: Development/Libraries
@@ -55,6 +55,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc README LICENSE
 
 %changelog
+* Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.3.9-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
 * Thu Jul 22 2010 David Malcolm <dmalcolm@redhat.com> - 0.3.9-2
 - Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
 
