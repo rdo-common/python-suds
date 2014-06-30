@@ -3,14 +3,14 @@
 Summary: A python SOAP client
 Name:  python-suds
 Version: 0.4.1
-Release: 6%{?dist}
+Release: 7%{?dist}
 Source0: https://fedorahosted.org/releases/s/u/suds/%{name}-%{version}.tar.gz
 License: LGPLv3+
 Group: Development/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildArch: noarch
 Requires: python >= 2.4
-BuildRequires: python-setuptools-devel
+BuildRequires: python-setuptools
 Url: https://fedorahosted.org/suds
 
 %description
@@ -54,6 +54,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc README LICENSE
 
 %changelog
+* Mon Jun 30 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 0.4.1-7
+- Replace python-setuptools-devel BR with python-setuptools
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.4.1-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
