@@ -1,59 +1,89 @@
-%{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
-
-Summary: A python SOAP client
-Name:  python-suds
-Version: 0.4.1
-Release: 8%{?dist}
-Source0: https://fedorahosted.org/releases/s/u/suds/%{name}-%{version}.tar.gz
-License: LGPLv3+
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildArch: noarch
-Requires: python >= 2.4
-BuildRequires: python-setuptools
-Url: https://fedorahosted.org/suds
-
-%description
-The suds project is a python soap web services client lib.  Suds leverages
-python meta programming to provide an intuitive API for consuming web
-services.  Objectification of types defined in the WSDL is provided
-without class generation.  Programmers rarely need to read the WSDL since
+%global commit 94664ddd46a61d06862fa8fb6ba7b9e054214f57
+%global shortcommit %(c=%{commit}; echo ${c:0:12})
+%global py2_builddir python2
+%global py3_builddir python3
+%global srcname suds
+%global sum A python SOAP client
+%global desc \
+The suds project is a python soap web services client lib.  Suds leverages\
+python meta programming to provide an intuitive API for consuming web\
+services.  Objectification of types defined in the WSDL is provided\
+without class generation.  Programmers rarely need to read the WSDL since\
 services and WSDL based objects can be easily inspected.
 
+Summary: %{sum}
+Name:  python-suds
+Version: 0.7
+Release: 0.1.%{shortcommit}%{?dist}
+Source0: https://bitbucket.org/jurko/suds/get/%{shortcommit}.tar.bz2
+Patch0: fix_http_test.patch
+License: LGPLv3+
+Group: Development/Libraries
+BuildArch: noarch
+BuildRequires: python2-devel python2-pytest python2-six
+BuildRequires: python3-devel python3-pytest python3-six
+URL: https://bitbucket.org/jurko/suds
+
+%description %{desc}
+
+%package -n python2-%{srcname}
+Summary:        %{sum}
+%{?python_provide:%python_provide python2-%{srcname}}
+%description -n python2-%{srcname} %{desc}
+
+%package -n python3-%{srcname}
+Summary:        %{sum}
+%{?python_provide:%python_provide python3-%{srcname}}
+%description -n python3-%{srcname} %{desc}
+
 %prep
-%setup -q
+%setup -c -q
+mv jurko-suds-%{shortcommit} %{py2_builddir}
+pushd %{py2_builddir}
+%patch0 -p1
+popd
+cp -a %{py2_builddir} %{py3_builddir}
 
 %build
-python setup.py sdist
+pushd %{py2_builddir}
+%py2_build
+popd
+pushd %{py3_builddir}
+%py3_build
+popd
 
 %install
-rm -rf $RPM_BUILD_ROOT
-python setup.py install --optimize=1 --root=$RPM_BUILD_ROOT
+pushd %{py2_builddir}
+%py2_install
+popd
+pushd %{py3_builddir}
+%py3_install
+popd
 
-%clean
-rm -rf $RPM_BUILD_ROOT
+%check
+pushd %{py2_builddir}
+%{__python2} setup.py test
+popd
+pushd %{py3_builddir}
+%{__python3} setup.py test
+popd
 
-%files
-%defattr(-,root,root,-)
-%{python_sitelib}/suds*.egg-info
-%dir %{python_sitelib}/suds
-%dir %{python_sitelib}/suds/bindings
-%dir %{python_sitelib}/suds/sax
-%dir %{python_sitelib}/suds/xsd
-%dir %{python_sitelib}/suds/mx
-%dir %{python_sitelib}/suds/umx
-%dir %{python_sitelib}/suds/transport
-%{python_sitelib}/suds/*.py*
-%{python_sitelib}/suds/bindings/*.py*
-%{python_sitelib}/suds/sax/*.py*
-%{python_sitelib}/suds/xsd/*.py*
-%{python_sitelib}/suds/mx/*.py*
-%{python_sitelib}/suds/umx/*.py*
-%{python_sitelib}/suds/transport/*.py*
+%files -n python2-%{srcname}
+%{python2_sitelib}/*
+%doc %{py2_builddir}/README.rst
+%license %{py2_builddir}/LICENSE.txt
 
-%doc README LICENSE
+%files -n python3-%{srcname}
+%{python3_sitelib}/*
+%doc %{py3_builddir}/README.rst
+%license %{py3_builddir}/LICENSE.txt
 
 %changelog
+* Fri Jan 01 2016 Scott Talbert <swt@techie.net> - 0.7-0.1.94664dd
+- Switched to Jurko fork of suds
+- Modernize python packaging, build python3 package
+- Fixed bogus changelog dates
+
 * Thu Jun 18 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.4.1-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
@@ -75,10 +105,10 @@ rm -rf $RPM_BUILD_ROOT
 * Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.4.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
-* Thu Oct 15 2010 jortel <jortel@redhat.com> - 0.4.1-1
+* Fri Oct 15 2010 jortel <jortel@redhat.com> - 0.4.1-1
 - 0.4.1
 
-* Thu Sep 8 2010 jortel <jortel@redhat.com> - 0.4-1
+* Wed Sep 8 2010 jortel <jortel@redhat.com> - 0.4-1
 - Fix spelling errors in spec description.
 - Fix source0 URL warning.
 - Updated caching to not cache intermediate wsdls.
@@ -120,7 +150,7 @@ rm -rf $RPM_BUILD_ROOT
   Reintroduced ability to pass complex (objects) using python dict instead of suds object via factory.
 - Fixed tickets: #84, #261, #262, #263, #265, #266, #278, #280, #282.
 
-* Thu Oct 16 2009 jortel <jortel@redhat.com> - 0.3.7-1
+* Fri Oct 16 2009 jortel <jortel@redhat.com> - 0.3.7-1
 - Better soap header support
 - Added new transport HttpAuthenticated for active (not passive) basic authentication.
 - New options (prefixes, timeout, retxml)
@@ -137,7 +167,7 @@ rm -rf $RPM_BUILD_ROOT
 * Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.3.6-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
-* Wed May 1 2009 jortel <jortel@redhat.com> - 0.3.6-1
+* Fri May 1 2009 jortel <jortel@redhat.com> - 0.3.6-1
 - Change hard coded /tmp/suds to tempfile.gettempdir() and create suds/ on demand.
 - Fix return type for Any.get_attribute().
 - Update http caching to ignore file:// urls.
@@ -172,10 +202,10 @@ rm -rf $RPM_BUILD_ROOT
 - WSDL part types no longer default to WSDL targetNamespace.
 - Fixed Tickets: #4, #6, #21, #32, #62, #66, #71, #72, #114, #155, #201.
 
-* Wed Dec 04 2008 jortel <jortel@redhat.com> - 0.3.3-2
+* Thu Dec 04 2008 jortel <jortel@redhat.com> - 0.3.3-2
 - Rebuild for Python 2.6
 
-* Wed Dec 04 2008 jortel <jortel@redhat.com> - 0.3.3-1
+* Thu Dec 04 2008 jortel <jortel@redhat.com> - 0.3.3-1
 - No longer installs (tests) package.
 - Implements API-3 proposal
     Pluggable transport
@@ -188,7 +218,7 @@ rm -rf $RPM_BUILD_ROOT
 * Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 0.3.2-2
 - Rebuild for Python 2.6
 
-* Fri Nov 06 2008 jortel <jortel@redhat.com> - 0.3.2-1
+* Thu Nov 06 2008 jortel <jortel@redhat.com> - 0.3.2-1
 - Add SOAP MultiRef support
 - Add support for new schema tags:
     <xs:include/>
@@ -212,16 +242,16 @@ rm -rf $RPM_BUILD_ROOT
 - Add proper namespace prefix for soap headers.
 - Fixed Tickets: #5, #12, #34, #37, #40, #44, #45, #46, #48, #49, #50, #51
 
-* Fri Nov 03 2008 jortel <jortel@redhat.com> - 0.3.1-5
+* Mon Nov 03 2008 jortel <jortel@redhat.com> - 0.3.1-5
 - Add LICENSE to %%doc.
 
-* Fri Oct 28 2008 jortel <jortel@redhat.com> - 0.3.1-4
+* Tue Oct 28 2008 jortel <jortel@redhat.com> - 0.3.1-4
 - Changes acc. #466496 Comment #8
 
-* Fri Oct 27 2008 jortel <jortel@redhat.com> - 0.3.1-3
+* Mon Oct 27 2008 jortel <jortel@redhat.com> - 0.3.1-3
 - Add "rm -rf $RPM_BUILD_ROOT" to install
 
-* Fri Oct 16 2008 jortel <jortel@redhat.com> - 0.3.1-2
+* Thu Oct 16 2008 jortel <jortel@redhat.com> - 0.3.1-2
 - Changes acc. #466496 Comment #1
 
 * Fri Oct 10 2008 jortel <jortel@redhat.com> - 0.3.1-1
