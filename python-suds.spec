@@ -11,6 +11,10 @@ services.  Objectification of types defined in the WSDL is provided\
 without class generation.  Programmers rarely need to read the WSDL since\
 services and WSDL based objects can be easily inspected.
 
+%if 0%{?fedora}
+%global with_python3 1
+%endif
+
 Summary: %{sum}
 Name:  python-suds
 Version: 0.7
@@ -20,8 +24,7 @@ Patch0: fix_http_test.patch
 License: LGPLv3+
 Group: Development/Libraries
 BuildArch: noarch
-BuildRequires: python2-devel python2-pytest python2-six
-BuildRequires: python3-devel python3-pytest python3-six
+BuildRequires: python2-devel python-pytest python-six
 URL: https://bitbucket.org/jurko/suds
 
 %description %{desc}
@@ -31,10 +34,13 @@ Summary:        %{sum}
 %{?python_provide:%python_provide python2-%{srcname}}
 %description -n python2-%{srcname} %{desc}
 
+%if 0%{?with_python3}
 %package -n python3-%{srcname}
 Summary:        %{sum}
 %{?python_provide:%python_provide python3-%{srcname}}
+BuildRequires: python3-devel python3-pytest python3-six
 %description -n python3-%{srcname} %{desc}
+%endif
 
 %prep
 %setup -c -q
@@ -42,41 +48,51 @@ mv jurko-suds-%{shortcommit} %{py2_builddir}
 pushd %{py2_builddir}
 %patch0 -p1
 popd
+%if 0%{?with_python3}
 cp -a %{py2_builddir} %{py3_builddir}
+%endif
 
 %build
 pushd %{py2_builddir}
 %py2_build
 popd
+%if 0%{?with_python3}
 pushd %{py3_builddir}
 %py3_build
 popd
+%endif
 
 %install
 pushd %{py2_builddir}
 %py2_install
 popd
+%if 0%{?with_python3}
 pushd %{py3_builddir}
 %py3_install
 popd
+%endif
 
 %check
 pushd %{py2_builddir}
 %{__python2} setup.py test
 popd
+%if 0%{?with_python3}
 pushd %{py3_builddir}
 %{__python3} setup.py test
 popd
+%endif
 
 %files -n python2-%{srcname}
 %{python2_sitelib}/*
 %doc %{py2_builddir}/README.rst
 %license %{py2_builddir}/LICENSE.txt
 
+%if 0%{?with_python3}
 %files -n python3-%{srcname}
 %{python3_sitelib}/*
 %doc %{py3_builddir}/README.rst
 %license %{py3_builddir}/LICENSE.txt
+%endif
 
 %changelog
 * Fri Jan 01 2016 Scott Talbert <swt@techie.net> - 0.7-0.1.94664dd
