@@ -18,9 +18,10 @@ services and WSDL based objects can be easily inspected.
 Summary: %{sum}
 Name:  python-suds
 Version: 0.7
-Release: 0.1.%{shortcommit}%{?dist}
+Release: 0.2.%{shortcommit}%{?dist}
 Source0: https://bitbucket.org/jurko/suds/get/%{shortcommit}.tar.bz2
 Patch0: fix_http_test.patch
+Patch0001: 0001-Add-suds.reader.DocumentReader-compat-methods-with-0.patch
 License: LGPLv3+
 Group: Development/Libraries
 BuildArch: noarch
@@ -47,6 +48,7 @@ BuildRequires: python3-devel python3-pytest python3-six
 mv jurko-suds-%{shortcommit} %{py2_builddir}
 pushd %{py2_builddir}
 %patch0 -p1
+%patch0001 -p1
 popd
 %if 0%{?with_python3}
 cp -a %{py2_builddir} %{py3_builddir}
@@ -95,6 +97,9 @@ popd
 %endif
 
 %changelog
+* Thu Aug 11 2016 Haïkel Guémar <hguemar@fedoraproject.org> - 0.7-0.2.94664dd
+- Add compat methods patches w/ 0.6 release
+
 * Fri Jan 01 2016 Scott Talbert <swt@techie.net> - 0.7-0.1.94664dd
 - Switched to Jurko fork of suds
 - Modernize python packaging, build python3 package
