@@ -1,4 +1,4 @@
-From c9439bc36c8e17d11bd2b271697afe3bb4d988b0 Mon Sep 17 00:00:00 2001
+From a53fc7ec19ab02073b79a8f198e72706e47b9a69 Mon Sep 17 00:00:00 2001
 From: Haikel Guemar <hguemar@fedoraproject.org>
 Date: Thu, 11 Aug 2016 16:48:28 +0200
 Subject: [PATCH] Add suds.reader.DocumentReader compat methods with 0.6
@@ -10,7 +10,7 @@ This is required to support oslo.vmware unit tests
  1 file changed, 7 insertions(+)
 
 diff --git a/suds/reader.py b/suds/reader.py
-index 1454c34..0d8d4f5 100644
+index 1454c34..f917d08 100644
 --- a/suds/reader.py
 +++ b/suds/reader.py
 @@ -194,3 +194,10 @@ class DocumentReader(Reader):
@@ -22,8 +22,8 @@ index 1454c34..0d8d4f5 100644
 +    def download(self, url):
 +        return self.__fetch(self, url)
 +
-+    def cache(self, url):
-+        return self.__cache(self, url)
++    def cache(self):
++        return self.__cache(self)
 -- 
 2.9.0
 

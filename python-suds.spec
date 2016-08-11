@@ -18,7 +18,7 @@ services and WSDL based objects can be easily inspected.
 Summary: %{sum}
 Name:  python-suds
 Version: 0.7
-Release: 0.2.%{shortcommit}%{?dist}
+Release: 0.3.%{shortcommit}%{?dist}
 Source0: https://bitbucket.org/jurko/suds/get/%{shortcommit}.tar.bz2
 Patch0: fix_http_test.patch
 Patch0001: 0001-Add-suds.reader.DocumentReader-compat-methods-with-0.patch
@@ -97,6 +97,9 @@ popd
 %endif
 
 %changelog
+* Thu Aug 11 2016 Haïkel Guémar <hguemar@fedoraproject.org> - 0.7-0.3.94664dd
+- Fix previous patch
+
 * Thu Aug 11 2016 Haïkel Guémar <hguemar@fedoraproject.org> - 0.7-0.2.94664dd
 - Add compat methods patches w/ 0.6 release
 
