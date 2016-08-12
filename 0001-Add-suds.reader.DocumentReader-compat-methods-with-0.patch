@@ -1,4 +1,4 @@
-From a53fc7ec19ab02073b79a8f198e72706e47b9a69 Mon Sep 17 00:00:00 2001
+From 16eefa99fc780d44f9757c1c0c279e768ccb9855 Mon Sep 17 00:00:00 2001
 From: Haikel Guemar <hguemar@fedoraproject.org>
 Date: Thu, 11 Aug 2016 16:48:28 +0200
 Subject: [PATCH] Add suds.reader.DocumentReader compat methods with 0.6
@@ -6,13 +6,22 @@ Subject: [PATCH] Add suds.reader.DocumentReader compat methods with 0.6
 
 This is required to support oslo.vmware unit tests
 ---
- suds/reader.py | 7 +++++++
- 1 file changed, 7 insertions(+)
+ suds/reader.py | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/suds/reader.py b/suds/reader.py
-index 1454c34..f917d08 100644
+index 1454c34..d3f2d09 100644
 --- a/suds/reader.py
 +++ b/suds/reader.py
+@@ -58,7 +58,7 @@ class Reader(object):
+         @rtype: str
+ 
+         """
+-        h = md5(name.encode()).hexdigest()
++        h = md5(str(name).encode()).hexdigest()
+         return '%s-%s' % (h, x)
+ 
+ 
 @@ -194,3 +194,10 @@ class DocumentReader(Reader):
          content = ctx.document
          sax = suds.sax.parser.Parser()
